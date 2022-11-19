@@ -12,8 +12,8 @@ pygame.init()
 surface = pygame.display.set_mode((500, 500))
 
 is_game_running = True
-SNAKE_WIDTH = 20
-SNAKE_HEIGHT = 20
+SNAKE_WIDTH = 5
+SNAKE_HEIGHT = 5
 
 WINDOW_WIDTH = surface.get_width()
 WINDOW_HEIGHT = surface.get_height()
@@ -21,6 +21,8 @@ WINDOW_HEIGHT = surface.get_height()
 snake_location_x = WINDOW_WIDTH // 2 - SNAKE_WIDTH // 2
 snake_location_y = WINDOW_HEIGHT // 2 - SNAKE_HEIGHT // 2
 snake_direction = SnakeDirection.DOWN
+snake_length = 5
+snake_history = []
 
 clock = pygame.time.Clock()
 
@@ -41,19 +43,25 @@ while is_game_running:
             snake_direction = SnakeDirection.RIGHT
     
     surface.fill((0, 0, 0))
-    surface.fill((255, 0, 0), (snake_location_x, snake_location_y, SNAKE_HEIGHT, SNAKE_WIDTH))
+    snake_history.append((snake_location_x, snake_location_y, SNAKE_HEIGHT, SNAKE_WIDTH))
+
+    if len(snake_history) > snake_length:
+        snake_history.pop(0)
+    
+    for rect in snake_history:
+        surface.fill((255, 0, 0), rect)
 
     if snake_direction == SnakeDirection.DOWN:
-        snake_location_y = (snake_location_y + 2) % WINDOW_HEIGHT
+        snake_location_y = (snake_location_y + SNAKE_WIDTH) % WINDOW_HEIGHT
     elif snake_direction == SnakeDirection.UP:
-        snake_location_y = (snake_location_y -2 ) % WINDOW_HEIGHT
+        snake_location_y = (snake_location_y - SNAKE_WIDTH) % WINDOW_HEIGHT
     elif snake_direction == SnakeDirection.LEFT:
-        snake_location_x = (snake_location_x - 2) % WINDOW_WIDTH
+        snake_location_x = (snake_location_x - SNAKE_HEIGHT) % WINDOW_WIDTH
     elif snake_direction == SnakeDirection.RIGHT:
-        snake_location_x = (snake_location_x + 2) % WINDOW_WIDTH
+        snake_location_x = (snake_location_x + SNAKE_HEIGHT) % WINDOW_WIDTH
 
     pygame.display.flip()
 
-    clock.tick(60)
+    clock.tick(30)
 
 pygame.quit()
