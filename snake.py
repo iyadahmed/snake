@@ -43,13 +43,13 @@ while is_game_running:
             is_game_running = False
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             is_game_running = False
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP and (snake_direction != SnakeDirection.DOWN or snake_length == 1):
             snake_direction = SnakeDirection.UP
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN and (snake_direction != SnakeDirection.UP or snake_length == 1):
             snake_direction = SnakeDirection.DOWN
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT and (snake_direction != SnakeDirection.RIGHT or snake_length == 1):
             snake_direction = SnakeDirection.LEFT
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT and (snake_direction != SnakeDirection.LEFT or snake_length == 1):
             snake_direction = SnakeDirection.RIGHT
     
     surface.fill((0, 0, 0))
