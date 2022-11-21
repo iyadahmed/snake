@@ -16,7 +16,8 @@ class SnakeDirection(Enum):
 pygame.init()
 surface = pygame.display.set_mode((0, 0), flags=pygame.FULLSCREEN)
 
-is_game_running = True
+is_game_main_loop_running = True
+is_game_over = False # Game can still restart after game over
 
 WINDOW_WIDTH = surface.get_width()
 WINDOW_HEIGHT = surface.get_height()
@@ -37,12 +38,12 @@ food_location_y = snap(randint(0, WINDOW_HEIGHT - SNAKE_HEIGHT), SNAKE_HEIGHT)
 clock = pygame.time.Clock()
 
 
-while is_game_running:
+while is_game_main_loop_running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            is_game_running = False
+            is_game_main_loop_running = False
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-            is_game_running = False
+            is_game_main_loop_running = False
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP and (snake_direction != SnakeDirection.DOWN or snake_length == 1):
             snake_direction = SnakeDirection.UP
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN and (snake_direction != SnakeDirection.UP or snake_length == 1):
@@ -59,8 +60,20 @@ while is_game_running:
     if len(snake_history) > snake_length:
         snake_history.pop(0)
     
+    snake_history_collision: dict[tuple[int, int], bool] = dict()
+    
     for rect in snake_history:
+        if snake_history_collision.get((rect[0], rect[1]), False):
+            is_game_over = True
+        snake_history_collision[(rect[0], rect[1])] = True
         surface.fill(SNAKE_COLOR, rect)
+    
+    if is_game_over:
+        snake_length = 1
+        snake_history.clear()
+        snake_location_x = WINDOW_WIDTH // 2 
+        snake_location_y = WINDOW_HEIGHT // 2
+        is_game_over = False
 
     if snake_direction == SnakeDirection.DOWN:
         snake_location_y = snap((snake_location_y + SNAKE_HEIGHT) % WINDOW_HEIGHT, SNAKE_HEIGHT)
