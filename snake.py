@@ -13,8 +13,11 @@ class SnakeDirection(Enum):
     LEFT = auto()
     RIGHT = auto()
 
+SNAKE_WIDTH = 50
+SNAKE_HEIGHT = 50
+
 pygame.init()
-surface = pygame.display.set_mode((0, 0), flags=pygame.FULLSCREEN)
+surface = pygame.display.set_mode((2 * 16 * SNAKE_WIDTH, 2 * 9 * SNAKE_HEIGHT), flags=pygame.FULLSCREEN | pygame.SCALED)
 
 is_game_main_loop_running = True
 is_game_over = False # Game can still restart after game over
@@ -22,8 +25,7 @@ is_game_over = False # Game can still restart after game over
 WINDOW_WIDTH = surface.get_width()
 WINDOW_HEIGHT = surface.get_height()
 
-SNAKE_WIDTH = 50
-SNAKE_HEIGHT = 50
+
 SNAKE_COLOR = (255, 255, 0)
 snake_location_x = WINDOW_WIDTH // 2 
 snake_location_y = WINDOW_HEIGHT // 2
